@@ -2,10 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String apiKey;
-  final String model;
+  final String apiKey = "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";
+  final String model = "llama-3.1-8b-instant";
 
-  ApiService({required this.apiKey, this.model = 'llama-3.1-8b-instant'});
   final url = Uri.parse("https://api.groq.com/openai/v1/chat/completions");
 
   Future<String> systemMessage(String prompt) async {
@@ -62,6 +61,15 @@ class ApiService {
     );
 
     final data = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      print(response.statusCode);
+    }else {
+      print(response.statusCode);
+    }
+
     return data['choices'][0]['message']['content'];
+
+
   }
 }
