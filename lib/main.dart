@@ -1,5 +1,5 @@
+import 'package:ai_chatbot/pages/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:ai_chatbot/pages/chat_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Ai Chat App",
-      home: ChatScreen(),
+      home: LoginScreen(),
     );
   }
 }

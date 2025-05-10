@@ -17,7 +17,7 @@ class ApiService {
         'Authorization': 'Bearer $apiKey',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({"model": model, "messages": message}),
+      body: jsonEncode({"model": model, "messages": message, "temperature": 0.6}),
     );
 
     final data = jsonDecode(response.body);
