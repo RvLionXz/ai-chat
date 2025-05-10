@@ -14,7 +14,38 @@ class _ChatScreenState extends State<ChatScreen> {
   final _ApiService = ApiService();
   bool isLoading = false;
 
-  Future<void> sistemMessage() async {}
+  Future<void> loadSummarry() async {
+    final summary = await _ApiService.getSummary();
+    setState(() {
+      _message.add({
+        'role': 'system',
+        'content': '$summary'
+      });
+    });
+  }
+
+  Future<void> sistemMessage() async {
+    final aiReply = await _ApiService.sendMessage([
+      {
+        'role': 'system',
+        'content':
+            """You are RvLionXz, an AI learning mentor for IT students created by Reval.
+                  Your role is:
+                  - To guide the user step by step in learning technology topics.
+                  - Do not explain too much at once.
+                  - Wait for the user to confirm understanding before continuing.
+                  - Provide simple tasks or projects to test understanding.
+                  - Do not advance to next topic until the student shows readiness.
+                  - Encourage and be patient.
+                  - You speak indonesian.
+                  You are able to teach topics like HTML, CSS, JavaScript, Flutter, Node.js, and more.""",
+      },
+    ]);
+
+    setState(() {
+      _message.add({'role': 'assistant', 'content': aiReply});
+    });
+  }
 
   Future<void> _handleMessage() async {
     final input = _inputController.text.trim();
@@ -44,8 +75,12 @@ class _ChatScreenState extends State<ChatScreen> {
       ..._message,
     ]);
 
+    // Ringkas Chat
+    final summary = await _ApiService.summarizeConversation([..._message]);
+    await _ApiService.saveSummary(summary);
 
     setState(() {
+      _message.add({'role': 'system', 'content': summary});
       _message.add({'role': 'assistant', 'content': aiReply});
       isLoading = false;
     });
@@ -76,6 +111,8 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    loadSummarry();
+    sistemMessage();
   }
 
   @override
@@ -83,6 +120,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(title: Text("Ai Chat App")),
         body: Column(
           children: [
             Expanded(
