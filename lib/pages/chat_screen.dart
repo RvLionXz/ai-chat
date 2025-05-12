@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '/services/ai_service.dart';
+import '../components/math_text_widget.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -102,6 +103,7 @@ Tujuan utama: Membimbing siswa sampai paham dengan baik, tidak terburu-buru, tid
 
   Widget _buildMessage(Map<String, String> msg) {
     if (msg['role'] == 'system') return const SizedBox();
+
     return Align(
       alignment:
           msg['role'] == 'user' ? Alignment.centerRight : Alignment.centerLeft,
@@ -112,9 +114,9 @@ Tujuan utama: Membimbing siswa sampai paham dengan baik, tidak terburu-buru, tid
           color: msg['role'] == 'user' ? Colors.blue : Colors.grey[300],
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Text(
-          msg['content'] ?? "",
-          style: TextStyle(
+        child: MathTextWidget(
+          text: msg['content'] ?? "",
+          textStyle: TextStyle(
             color: msg['role'] == 'user' ? Colors.white : Colors.black,
           ),
         ),
